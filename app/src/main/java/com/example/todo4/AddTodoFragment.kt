@@ -8,15 +8,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.todo4.databinding.FragmentAddTodoBinding
 import com.example.todo4.databinding.FragmentTodoListBinding
-import com.example.todo4.model.TodoModel
 
 class AddTodoFragment : Fragment() {
     private var _binding:FragmentAddTodoBinding? = null
     private val binding get() = _binding!!
-
+    private val viewModel: TodoListViewModel by activityViewModels()
     private lateinit var titleEditText: EditText
     private lateinit var detailEditText: EditText
     private lateinit var saveBtn: Button
@@ -37,14 +39,9 @@ class AddTodoFragment : Fragment() {
         saveBtn.setOnClickListener {
             val title = titleEditText.text.toString()
             val detail = detailEditText.text.toString()
-
-            val todoModel = TodoModel(title, detail)
-            //val bundle = bundleOf("Todo" to todoModel)
-            val action = AddTodoFragmentDirections.setTodoAction(todoModel)
-            view.findNavController().navigate(action)
-
+            viewModel.addItem(title, detail)
+            findNavController().navigate(R.id.back_to_list)
         }
-
     }
     override fun onDestroyView() {
         super.onDestroyView()

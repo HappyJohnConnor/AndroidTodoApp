@@ -7,22 +7,19 @@
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.example.todo4.TodoListFragment"
-        android:label="fragment_todo_list"
-        tools:layout="@layout/fragment_todo_list" >
+        android:label="Todo"
+        tools:layout="@layout/fragment_todo_list">
         <action
             android:id="@+id/action_todoListFragment_to_addTodoFragment"
             app:destination="@id/addTodoFragment" />
-        <argument
-            android:name="todo"
-            app:argType="com.example.todo4.model.TodoModel" />
     </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
         android:name="com.example.todo4.AddTodoFragment"
-        android:label="fragment_add_todo"
-        tools:layout="@layout/fragment_add_todo" >
+        android:label="Add todo"
+        tools:layout="@layout/fragment_add_todo">
         <action
-            android:id="@+id/setTodoAction"
+            android:id="@+id/back_to_list"
             app:destination="@id/todoListFragment" />
     </fragment>
 </navigation>

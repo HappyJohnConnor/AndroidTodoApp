@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo4.data.Todo
 import com.example.todo4.databinding.TodoItemBinding
 
-class TodoListAdapter():
+class TodoListAdapter(private val onItemClicked:(Todo) -> Unit):
     ListAdapter<Todo, TodoListAdapter.ItemViewHolder>(DiffCallback){
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -22,7 +22,7 @@ class TodoListAdapter():
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val current = getItem(position)
         holder.itemView.setOnClickListener{
-           // onItemClicked(current)
+           onItemClicked(current)
         }
         holder.bind(current)
     }

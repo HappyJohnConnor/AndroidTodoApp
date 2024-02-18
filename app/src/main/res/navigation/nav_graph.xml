@@ -10,8 +10,11 @@
         android:label="Todo"
         tools:layout="@layout/fragment_todo_list">
         <action
-            android:id="@+id/action_todoListFragment_to_addTodoFragment"
+            android:id="@+id/list_to_add"
             app:destination="@id/addTodoFragment" />
+        <action
+            android:id="@+id/action_todoListFragment_to_editTodoFragment"
+            app:destination="@id/editTodoFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
@@ -21,5 +24,17 @@
         <action
             android:id="@+id/back_to_list"
             app:destination="@id/todoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTodoFragment"
+        android:name="com.example.todo4.EditTodoFragment"
+        android:label="Edit"
+        tools:layout="@layout/fragment_edit_todo">
+        <action
+            android:id="@+id/action_editTodoFragment_to_todoListFragment"
+            app:destination="@id/todoListFragment" />
+        <argument
+            android:name="todo_id"
+            app:argType="integer" />
     </fragment>
 </navigation>

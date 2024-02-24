@@ -7,9 +7,15 @@ import androidx.lifecycle.distinctUntilChanged
 import com.example.todo4.data.Todo
 
 class TodoListViewModel : ViewModel() {
-    private val todosRaw = mutableListOf<Todo>()
+    private val todosRaw = mutableListOf<Todo>(Todo(1, "hoge", "foo"), Todo(2, "a", "b"))
 
-    private val _todos = MutableLiveData<List<Todo>>(emptyList())
+    private val _todos = MutableLiveData<List<Todo>>(
+        listOf(
+            Todo(1, "Task 1", "Detail 1"),
+            Todo(2, "Task 2", "Detail 2"),
+            Todo(3, "Task 3", "Detail 3")
+        )
+    )
     private var index: Int = 0
     val todos: LiveData<List<Todo>> = _todos.distinctUntilChanged()
 

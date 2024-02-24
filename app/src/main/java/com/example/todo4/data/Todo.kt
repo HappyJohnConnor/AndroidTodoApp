@@ -1,7 +1,11 @@
 package com.example.todo4.data
 
-data class Todo (
+import java.util.Date
+
+data class Todo(
     val id: Int,
-    val title: String,
-    val detail: String
-)
+    var title: String,
+    var detail: String = ""
+) {
+    val dueDate: Date? = null
+}

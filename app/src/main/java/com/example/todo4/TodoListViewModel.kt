@@ -7,17 +7,18 @@ import androidx.lifecycle.distinctUntilChanged
 import com.example.todo4.data.Todo
 
 class TodoListViewModel : ViewModel() {
-    private val todosRaw = mutableListOf<Todo>(Todo(1, "hoge", "foo"), Todo(2, "a", "b"))
+    private val todosRaw =
+        mutableListOf<Todo>(Todo(1, "Title1", "Detail2"), Todo(2, "Title2", "Detail2"))
 
     private val _todos = MutableLiveData<List<Todo>>(
-        listOf(
-            Todo(1, "Task 1", "Detail 1"),
-            Todo(2, "Task 2", "Detail 2"),
-            Todo(3, "Task 3", "Detail 3")
-        )
+        emptyList()
     )
     private var index: Int = 0
     val todos: LiveData<List<Todo>> = _todos.distinctUntilChanged()
+
+    init {
+        _todos.value = todosRaw
+    }
 
     fun retrieveItem(id: Int): Todo {
         lateinit var item: Todo
@@ -42,6 +43,16 @@ class TodoListViewModel : ViewModel() {
             todosRaw[index] = item
             _todos.value = ArrayList(todosRaw)
         }
+    }
+
+    fun deleteItem(item: Todo) {
+        todosRaw.remove(item)
+        _todos.value = ArrayList(todosRaw)
+    }
+
+    fun deleteItem(position: Int) {
+        todosRaw.removeAt(position)
+        _todos.value = ArrayList(todosRaw)
     }
 
     fun getItemIndex(item: Todo) {}

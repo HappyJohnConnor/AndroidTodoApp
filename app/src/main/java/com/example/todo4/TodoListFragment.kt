@@ -9,9 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo4.databinding.FragmentTodoListBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class TodoListFragment : Fragment() {
     private var _binding: FragmentTodoListBinding? = null
@@ -46,12 +48,15 @@ class TodoListFragment : Fragment() {
         }
 
         recyclerView.setHasFixedSize(true)
+
         recyclerView.layoutManager = GridLayoutManager(
             context,
             2,
             RecyclerView.VERTICAL,
             false
         )
+
+        //recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
         addBtn.setOnClickListener {
@@ -61,6 +66,33 @@ class TodoListFragment : Fragment() {
         viewModel.todos.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
+
+        val mIth = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
+                ItemTouchHelper.LEFT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val fromPos = viewHolder.bindingAdapterPosition
+                    val toPos = target.bindingAdapterPosition
+                    adapter.notifyItemMoved(fromPos, toPos)
+                    return true // true if moved, false otherwise
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.bindingAdapterPosition
+                    if (direction == ItemTouchHelper.LEFT) {
+                        viewModel.deleteItem(position)
+                        adapter.notifyItemRemoved(position)
+
+                    }
+                }
+            })
+        mIth.attachToRecyclerView(recyclerView)
 
     }
 

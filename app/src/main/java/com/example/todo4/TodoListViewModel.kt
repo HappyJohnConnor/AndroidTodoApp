@@ -5,15 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import com.example.todo4.data.Todo
+import java.util.Date
 
 class TodoListViewModel : ViewModel() {
     private val todosRaw =
-        mutableListOf<Todo>(Todo(1, "Title1", "Detail2"), Todo(2, "Title2", "Detail2"))
+        mutableListOf<Todo>(
+            Todo(1, "Title1", "Detail2", null),
+            Todo(2, "Title2", "Detail2", Date())
+        )
 
     private val _todos = MutableLiveData<List<Todo>>(
         emptyList()
     )
-    private var index: Int = 0
+    private var index: Int = 2
     val todos: LiveData<List<Todo>> = _todos.distinctUntilChanged()
 
     init {
@@ -29,8 +33,8 @@ class TodoListViewModel : ViewModel() {
         return item
     }
 
-    fun addItem(title: String, detail: String) {
-        val newTodo = Todo(index, title, detail)
+    fun addItem(title: String, detail: String, due: Date?) {
+        val newTodo = Todo(index, title, detail, due)
         todosRaw.add(newTodo)
         _todos.value = ArrayList(todosRaw)
         index += 1

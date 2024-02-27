@@ -1,6 +1,5 @@
 package com.example.todo4
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -17,7 +16,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.todo4.databinding.FragmentAddTodoBinding
-import java.util.Calendar
+import com.example.todo4.utility.DatePickerDialogFragment
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class AddTodoFragment : Fragment() {
     private var _binding: FragmentAddTodoBinding? = null
@@ -26,6 +27,7 @@ class AddTodoFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var detailEditText: EditText
     private lateinit var saveBtn: Button
+    private var dueDate: Date? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,7 @@ class AddTodoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val menuHost: MenuHost = requireActivity()
+        var dueDate: Date? = null
 
         menuHost.addMenuProvider(
             object : MenuProvider {
@@ -53,25 +56,24 @@ class AddTodoFragment : Fragment() {
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     return when (menuItem.itemId) {
                         R.id.todo_date -> {
-                            val calendar = Calendar.getInstance()
+                            val calDialogFragment = DatePickerDialogFragment()
+                            calDialogFragment.show(childFragmentManager, "my_dialog")
+                            childFragmentManager.setFragmentResultListener(
+                                DatePickerDialogFragment.FRAGMENT_KEY,
+                                viewLifecycleOwner,
+                            ) { _, result: Bundle ->
+                                val timeMills =
+                                    result.getLong(DatePickerDialogFragment.BUNDLE_KEY_DUEDATE, 0)
 
-                            val MONTH = calendar[Calendar.MONTH]
-                            val YEAR = calendar[Calendar.YEAR]
-                            val DAY = calendar[Calendar.DATE]
-
-                            val datePickerDialog = DatePickerDialog(
-                                context!!,
-                                { view, year, month, dayOfMonth ->
-                                    var month = month
-                                    month = month + 1
-                                }, YEAR, MONTH, DAY
-                            )
-
-                            datePickerDialog.show()
-                            return true
+                                if (timeMills != 0L) {
+                                    dueDate = Date(timeMills)
+                                    setDateToTextView(Date(timeMills))
+                                }
+                            }
+                            return false
                         }
 
-                        else -> true
+                        else -> false
 
                     }
                 }
@@ -83,7 +85,7 @@ class AddTodoFragment : Fragment() {
         saveBtn.setOnClickListener {
             val title = titleEditText.text.toString()
             val detail = detailEditText.text.toString()
-            viewModel.addItem(title, detail)
+            viewModel.addItem(title, detail, dueDate)
             findNavController().navigate(R.id.back_to_list)
         }
     }
@@ -93,4 +95,8 @@ class AddTodoFragment : Fragment() {
         _binding = null
     }
 
+    private fun setDateToTextView(date: Date) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        binding.dueDate.text = dateFormat.format(date)
+    }
 }

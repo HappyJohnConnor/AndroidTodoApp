@@ -5,7 +5,6 @@ import java.util.Date
 data class Todo(
     val id: Int,
     var title: String,
-    var detail: String = ""
-) {
-    val dueDate: Date? = null
-}
+    var detail: String,
+    var dueDate: Date? = null
+)

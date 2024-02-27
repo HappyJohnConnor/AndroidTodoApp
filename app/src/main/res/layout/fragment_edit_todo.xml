@@ -18,13 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/set_due_tv"
+        android:id="@+id/edit_tv_due"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:drawableRight="@drawable/baseline_calendar_today_24"
         android:drawablePadding="8dp"
-        android:text="Set Due Date"
         android:textColor="@color/green_blue"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/et_title"
